@@ -14,7 +14,7 @@ exports.OwnerRegister = async (req, res) => {
         res.status(200).json({
             status: 'Success',
             message: 'New Owner Add Successfully',
-            OwnerRegister
+            data : OwnerRegister
         })
 
     } catch (error) {
