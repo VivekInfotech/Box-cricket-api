@@ -14,6 +14,11 @@ var ownerSchema = new mongoose.Schema({
         type : String,
         required : true,
         // max : [20 , "Password lenght is to long"]
+    },
+    status: {
+        type: String,
+        enum: ['Pending', 'approved', 'block'],
+        default: 'Pending'
     }
 })
 

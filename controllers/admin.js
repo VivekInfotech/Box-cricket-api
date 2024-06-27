@@ -2,6 +2,8 @@ var Admin = require('../models/Admin/admin.js')
 var bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
 var Box = require('../models/Box-Owner/box.js')
+
+var Owner = require('../models/Box-Owner/owner.js')
 exports.adminRegister = async (req, res) => {
     try {
         var { password } = req.body
@@ -127,7 +129,30 @@ exports.approveBox = async (req, res) => {
 
         res.status(200).json({
             status: 'Success',
-            message: 'Admin Data Delete Successfully',
+            message: 'status changed successfully',
+            // data : OwnerUpdate
+        })
+    } catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+}
+
+exports.approveBox = async (req, res) => {
+    try {
+        var owner_id = req.params.id
+
+        if (!owner_id) {
+            throw new Error('Include id in params')
+        }
+
+        var AprroveOwner = await Owner.findByIdAndUpdate(id , {status : req.body.status})
+
+        res.status(200).json({
+            status: 'Success',
+            message: 'Status changed successfully',
             // data : OwnerUpdate
         })
     } catch (error) {
