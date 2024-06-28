@@ -76,7 +76,7 @@ var Shift = mongoose.Schema({
                 type: Boolean,
                 default: true
             },
-            price: {
+            morningPrice: {
                 type: Number,
                 required: true
             }
@@ -133,7 +133,7 @@ var Shift = mongoose.Schema({
                 type: Boolean,
                 default: true
             },
-            price: {
+            nightPrice : {
                 type: Number,
                 required: true
             }

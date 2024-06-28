@@ -4,16 +4,38 @@ var jwt = require('jsonwebtoken')
 
 exports.addBox = async (req, res) => {
     try {
+        var {boxName, images ,street ,city,state,pinCode,country, morningPrice , nightPrice } = req.body
         var id = await jwt.verify(req.headers.auth, 'Owner')
         if (!id) {
             throw new Error("token must be provided")
         }
-        req.body.ownerId = id
+        var ownerId = id
 
-        req.body.images = req.files?.map(file=>file.originalname)
+        var images = req.files ? req.files.map(file => file.originalname) : null;
 
 
-        var addBoxData = await Box.create(req.body)
+        var addBoxData = new Box({
+            ownerId,
+            boxName,
+            images,
+            address : {
+                street,
+                city,
+                state,
+                pinCode,
+                country
+            },
+            opning:{
+                morning : [{
+                    morningPrice : morningPrice
+                }],
+                night : [{
+                    nightPrice : nightPrice
+                }]
+            }
+        })
+
+        await addBoxData.save()
 
         res.status(200).json({
             status: 'Success',
