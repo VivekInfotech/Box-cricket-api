@@ -10,7 +10,7 @@ exports.addBox = async (req, res) => {
         }
         req.body.ownerId = id
 
-        req.body.images = req.files.map(file=>file.originalname)
+        req.body.images = req.files?.map(file=>file.originalname)
 
 
         var addBoxData = await Box.create(req.body)

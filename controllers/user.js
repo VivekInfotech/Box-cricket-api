@@ -60,7 +60,6 @@ exports.userLogin = async (req, res) => {
 
 exports.userUpdate = async (req, res) => {
     try {
-
         var id = req.params.id
         console.log(id);
 
@@ -106,5 +105,5 @@ exports.userDelete = async(req,res)=>{
             message: error.message
         })
     }
-}3
+}
 

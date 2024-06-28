@@ -8,7 +8,7 @@ var app = require('../app');
 var debug = require('debug')('project:server');
 var http = require('http');
 var mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost:27017/Boc-Cricket')
+mongoose.connect('mongodb+srv://vivekvaghasiya133:sMohq4g1e43vcl6o@cluster0.cofrakj.mongodb.net/')
 .then((res)=> console.log('Connected...'))
 .catch((err)=> console.log(err))
 /**
