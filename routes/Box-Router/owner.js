@@ -1,5 +1,6 @@
 var express = require('express');
 // const { OwnerRegister, OwnerLogin, getOwnerDetails, OwnerUpdate, OwnerDelete } = require('../../controllers/owner');
+// require('../../controllers/owner');
 const Owner = require('../../controllers/owner')
 const box = require('../../controllers/box')
 var router = express.Router();
@@ -35,7 +36,7 @@ router.delete('/owner/:id',Owner.OwnerDelete)
 router.post('/addbox' ,upload.array('images',10), box.addBox)
 router.put('/updatebox/:id' ,upload.array('images',10), box.updateBox)
 router.delete('/deletebox/:id' , box.removeBox)
-
+  
 router.get('/boxbyowner' , box.ownerBox)
 
 

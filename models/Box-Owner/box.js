@@ -1,4 +1,3 @@
-// const { type } = require('express/lib/response')
 var mongoose = require('mongoose')
 
 
@@ -26,7 +25,7 @@ const addressSchema = new mongoose.Schema({
 }, { _id: false });
 
 var Shift = mongoose.Schema({
-    morning: [
+    morning: 
         {
             eight_nine_am: {
                 type: Boolean,
@@ -81,9 +80,9 @@ var Shift = mongoose.Schema({
                 required: true
             }
         },
-        { _id: false }
-    ],
-    night: [
+  
+    
+    night: 
         {
             eight_nine_pm: {
                 type: Boolean,
@@ -138,9 +137,8 @@ var Shift = mongoose.Schema({
                 required: true
             }
 
-        },
-        { _id: false }
-    ]
+        }
+    
 }, { _id: false })
 
 

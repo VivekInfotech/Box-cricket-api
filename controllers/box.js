@@ -26,12 +26,12 @@ exports.addBox = async (req, res) => {
                 country
             },
             opning:{
-                morning : [{
+                morning : {
                     morningPrice : morningPrice
-                }],
-                night : [{
+                },
+                night : {
                     nightPrice : nightPrice
-                }]
+                }
             }
         })
 
@@ -53,35 +53,63 @@ exports.addBox = async (req, res) => {
 }
 
 
+
 exports.updateBox = async (req, res) => {
     try {
-
-        var decode = await jwt.verify(req.headers.auth, 'Owner')
-        var id = req.params.id
-        req.body.images = req.files.map(file=>file.originalname)
-
-
-        if (!decode) {
-            throw new Error("token must be provided")
+        const { boxName, images, street, city, state, pinCode, country, morningPrice, nightPrice } = req.body;
+        const token = req.headers.auth;
+        
+        if (!token) {
+            throw new Error("Token must be provided");
         }
-        req.body.ownerId = decode
 
-        var updateBoxData = await Box.findByIdAndUpdate(id, req.body)
+        const decoded = jwt.verify(token, 'Owner');
+        if (!decoded) {
+            throw new Error("Invalid token");
+        }
+
+        const id1 = req.params.id;
+
+        const updateData = {
+            boxName,
+            images: req.files ? req.files.map(file => file.originalname) : images,
+            address: {
+                street,
+                city,
+                state,
+                pinCode,
+                country
+            },
+            opning: {
+                morning: {
+                    morningPrice
+                },
+                night: {
+                    nightPrice
+                }
+            }
+        };
+
+        const updatedBox = await Box.findByIdAndUpdate(id1, updateData, { new: true });
+
+        if (!updatedBox) {
+            throw new Error("Box not found or you are not authorized to update this box");
+        }
 
         res.status(200).json({
             status: 'Success',
-            message: 'Box Update Successfully',
-            data: updateBoxData
-        })
-
+            message: 'Box Updated Successfully',
+            data: updatedBox
+        });
 
     } catch (error) {
         res.status(401).json({
             status: 'Failed',
             message: error.message
-        })
+        });
     }
-}
+};
+
 
 exports.removeBox = async (req,res) => {
     try {
@@ -110,7 +138,7 @@ exports.ownerBox = async(req, res) => {
         var decode = await jwt.verify(req.headers.auth, 'Owner')
         console.log(decode);
 
-        var OwnerbyID = await Box.findOne({ ownerId : decode }).populate('ownerId', {password : 0 , _id : 0});
+        var OwnerbyID = await Box.find({ ownerId : decode }).populate('ownerId', {password : 0 , _id : 0});
 
         res.status(200).json({
             status: 'Success',

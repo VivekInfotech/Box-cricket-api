@@ -2,18 +2,23 @@ var Admin = require('../models/Admin/admin.js')
 var bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
 var Box = require('../models/Box-Owner/box.js')
-
 var Owner = require('../models/Box-Owner/owner.js')
 exports.adminRegister = async (req, res) => {
     try {
-        var { password } = req.body
+        var { adminName ,email , password } = req.body
+        
         req.body.password = await bcrypt.hash(password, 12)
-        var AdminCreate = await Admin.create(req.body)
-
+        
+        var AdminData = new Admin({
+            adminName,
+            email,
+            password
+        })
+        await AdminData.save()
         res.status(200).json({
             status: 'Success',
             message: 'Admin create Successfully',
-            data: AdminCreate
+            data: AdminData
         })
 
     } catch (error) {
@@ -140,7 +145,7 @@ exports.approveBox = async (req, res) => {
     }
 }
 
-exports.approveBox = async (req, res) => {
+exports.approveOwner = async (req, res) => {
     try {
         var owner_id = req.params.id
 
@@ -162,3 +167,62 @@ exports.approveBox = async (req, res) => {
         })
     }
 }
+
+exports.getOwners = async (req,res) => {
+    try{
+
+        var Ownerdata = await Owner.find()//projection //password not show
+
+        res.status(200).json({
+            status : true,
+            data : Ownerdata
+        })
+
+    }
+    catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+}
+
+exports.getOwnerBox = async (req,res) => {
+    try{
+        var owner_id = req.params.id
+
+        var Boxdata = await Box.findById(owner_id)//projection //password not show
+
+        res.status(200).json({
+            status : true,
+            data : Boxdata
+        })
+
+    }
+    catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+}
+
+exports.getAllBox = async (req,res) => {
+    try{
+       
+        var Boxdata = await Box.find()//projection //password not show
+
+        res.status(200).json({
+            status : true,
+            data : Boxdata
+        })
+
+    }
+    catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+}
+
