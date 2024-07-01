@@ -7,7 +7,7 @@ const owner = require('../models/Box-Owner/owner.js')
 exports.OwnerRegister = async (req, res) => {
     try {
         var { password , email , ownerName , status } = req.body
-        req.body.password = await bcrypt.hash(password, 12)
+        password = await bcrypt.hash(password, 12)
 
         // var OwnerRegister = await Owner.create(req.body)
         var OwnerRegister = new Owner({

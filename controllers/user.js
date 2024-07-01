@@ -1,16 +1,22 @@
 var User = require('../models/user/user')
 var bcrypt = require('bcrypt')
-
+var Box = require('../models/Box-Owner/box')
 exports.userRegister = async (req, res) => {
     try {
-        var { password } = req.body
-        req.body.password = await bcrypt.hash(password, 12)
-        var UserCreate = await User.create(req.body)
+        var { userName ,email , password } = req.body
+        password = await bcrypt.hash(password, 12)
+        
+        var UserData = new User({
+            userName,
+            password,
+            email
+        })
+        await UserData.save()
 
         res.status(200).json({
             status: 'Success',
             message: 'User registered Successfully',
-            data: UserCreate
+            data: UserData
         })
 
     } catch (error) {
@@ -107,3 +113,57 @@ exports.userDelete = async(req,res)=>{
     }
 }
 
+exports.viewAllBox = async (req,res) => {
+    try{
+        var Boxdata = await Box.find()//projection //password not show
+
+        res.status(200).json({
+            status : true,
+            data : Boxdata
+        })
+
+    }
+    catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+}
+
+exports.getOneBox = async (req,res) => {
+try{
+
+    var box_id =  req.params.id
+    var Boxdata = await Box.findById(box_id)
+
+    res.status(200).json({
+        status : true,
+        data : Boxdata
+    })
+}
+catch (error) {
+    res.status(401).json({
+        status: 'Failed',
+        message: error.message
+    })
+}
+}
+
+exports.getshift = async (req,res) => {
+    try{
+    var box_id =  req.params.id
+    var Boxdata = await Box.findById(box_id,{})
+
+    res.status(200).json({
+        status : true,
+        data : Boxdata
+    })
+}
+catch (error) {
+    res.status(401).json({
+        status: 'Failed',
+        message: error.message
+    })
+}
+}

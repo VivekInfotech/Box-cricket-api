@@ -7,7 +7,7 @@ exports.adminRegister = async (req, res) => {
     try {
         var { adminName ,email , password } = req.body
         
-        req.body.password = await bcrypt.hash(password, 12)
+        password = await bcrypt.hash(password, 12)
         
         var AdminData = new Admin({
             adminName,
@@ -191,7 +191,7 @@ exports.getOwnerBox = async (req,res) => {
     try{
         var owner_id = req.params.id
 
-        var Boxdata = await Box.findById(owner_id)//projection //password not show
+        var Boxdata = await Box.find({ownerId :owner_id},{_id : 0})//projection //password not show
 
         res.status(200).json({
             status : true,

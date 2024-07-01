@@ -12,7 +12,7 @@ router.put('/approveBox',Admin.approveBox)
 router.put('/approveOwner',Admin.approveOwner)
 router.get('/getOwner',Admin.getOwners)
 router.get('/getAllBox',Admin.getAllBox)
-router.get('/getOwnerBox',Admin.getOwnerBox)
+router.get('/getOwnerBox/:id',Admin.getOwnerBox)
 
 
 

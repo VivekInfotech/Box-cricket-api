@@ -23,14 +23,6 @@ router.post('/ownerlogin' , Owner.OwnerLogin)
 router.get('/ownerProfile',Owner.getOwnerDetails)
 router.put('/owner/:id',Owner.OwnerUpdate)
 router.delete('/owner/:id',Owner.OwnerDelete)
-
-
-
-
-
-
-
-
 //Box router
 
 router.post('/addbox' ,upload.array('images',10), box.addBox)

@@ -14,6 +14,10 @@ var userSchema = new mongoose.Schema({
         type : String,
         required : [true, 'Password is required'],
         // max : [20 , "Password lenght is to long"]
+    },
+    contact : {
+        type : String,
+        required : [true,"contact no is required"]
     }
 })
 
