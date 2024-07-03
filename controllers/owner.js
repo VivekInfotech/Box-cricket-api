@@ -33,7 +33,9 @@ exports.OwnerRegister = async (req, res) => {
 exports.OwnerLogin = async(req, res) => {
     try {
         var token
-        var {email , password} = req.body
+        var {email , password } = req.body
+
+        // console.log(status);
         var OwnerEmailCheck = await Owner.findOne({email})
 
         if (!OwnerEmailCheck) {

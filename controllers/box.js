@@ -4,7 +4,7 @@ var jwt = require('jsonwebtoken')
 
 exports.addBox = async (req, res) => {
     try {
-        var {boxName, images ,street ,city,state,pinCode,country, morningPrice , nightPrice } = req.body
+        var {boxName, images ,street ,city,state , area,pinCode,country, morningPrice , nightPrice , contact } = req.body
         var id = await jwt.verify(req.headers.auth, 'Owner')
         if (!id) {
             throw new Error("token must be provided")
@@ -18,8 +18,10 @@ exports.addBox = async (req, res) => {
             ownerId,
             boxName,
             images,
+            contact,
             address : {
                 street,
+                area,
                 city,
                 state,
                 pinCode,

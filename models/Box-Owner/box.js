@@ -6,6 +6,10 @@ const addressSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    area: {
+        type: String,
+        required: true
+    },
     city: {
         type: String,
         required: true
@@ -156,9 +160,13 @@ var boxSchema = new mongoose.Schema({
     images: [
         {
             type: String,
-            requires: true
+            required: true
         }
     ],
+    contact : {
+        type : Number,
+        required : true
+    },
     address: addressSchema,
     opning: Shift,
     status: {
