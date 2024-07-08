@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Box = require('../models/Box-Owner/box.js')
 var jwt = require('jsonwebtoken')
-
+var Owner = require('../models/Box-Owner/owner.js')
 exports.addBox = async (req, res) => {
     try {
         var {boxName, images ,street ,city,state , area,pinCode,country, morningPrice , nightPrice , contact } = req.body
@@ -10,6 +10,13 @@ exports.addBox = async (req, res) => {
             throw new Error("token must be provided")
         }
         var ownerId = id
+
+        var checkStatus = await Owner.findById(id)
+        let status = checkStatus.status
+
+        if (status !== "approved") {
+            throw new Error(`You are not able to add box because your status is ${status}`);
+        }
 
         var images = req.files ? req.files.map(file => file.originalname) : null;
 
