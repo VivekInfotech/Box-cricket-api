@@ -4,27 +4,27 @@ var mongoose = require('mongoose')
 const addressSchema = new mongoose.Schema({
     street: {
         type: String,
-        required: true
+        required: [true , "Street is required"]
     },
     area: {
         type: String,
-        required: true
+        required: [true , "area is required"]
     },
     city: {
         type: String,
-        required: true
+        required: [true , "city is required"]
     },
     state: {
         type: String,
-        required: true
+        required: [true , "state is required"]
     },
     pinCode: {
         type: String,
-        required: true
+        required: [true , "pinCode is required"]
     },
     country: {
         type: String,
-        required: true
+        required: [true , "country is required"]
     }
 }, { _id: false });
 
@@ -155,17 +155,17 @@ var boxSchema = new mongoose.Schema({
     },
     boxName: {
         type: String,
-        required: true
+        required: [true , "boxName is required"]
     },
     images: [
         {
             type: String,
-            required: true
+            required: [true , "images is required"]
         }
     ],
     contact : {
         type : Number,
-        required : true
+        required : [true , "contact is required"]
     },
     address: addressSchema,
     opning: Shift,

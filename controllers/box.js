@@ -5,6 +5,10 @@ var Owner = require('../models/Box-Owner/owner.js')
 exports.addBox = async (req, res) => {
     try {
         var {boxName, images ,street ,city,state , area,pinCode,country, morningPrice , nightPrice , contact } = req.body
+
+        if (!boxName || !street || !city || !state || !area || !pinCode || !country || !morningPrice || !nightPrice || !contact) {
+            throw new Error('Filds are required asdasdfa')
+        }
         var id = await jwt.verify(req.headers.auth, 'Owner')
         if (!id) {
             throw new Error("token must be provided")

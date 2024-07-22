@@ -75,7 +75,7 @@ exports.getOwnerDetails = async (req,res) => {
         if(!id){
             throw new Error("token must be provided")
         }
-        var Ownerdata = await Owner.findById(id , {password : 0})//projection //password not show
+        var Ownerdata = await Owner.findById(id , {password : 0})
 
         res.status(200).json({
             status : true,

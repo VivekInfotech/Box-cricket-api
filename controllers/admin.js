@@ -134,7 +134,7 @@ exports.approveBox = async (req, res) => {
             throw new Error('Include id in params')
         }
         var AprroveBox = await Box.findByIdAndUpdate(id, { status: req.body.status })
-        
+
 
         res.status(200).json({
             status: 'Success',
@@ -172,9 +172,9 @@ exports.approveOwner = async (req, res) => {
         });
         let emailContent;
 
-    switch (status) {
-      case 'approved':
-        emailContent = `
+        switch (status) {
+            case 'approved':
+                emailContent = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 10px; background-color: black; color: #ffffff;">
             <div style="text-align: center;">
               <img src="https://i.pinimg.com/550x/78/1d/67/781d6783a1465bcfd437146c334f783c.jpg" alt="Amazon" style="width: 200px; margin-bottom: 20px; filter: brightness(150%);">
@@ -194,9 +194,9 @@ exports.approveOwner = async (req, res) => {
             </p>
           </div>
         `;
-        break;
-      case 'block':
-        emailContent = `
+                break;
+            case 'block':
+                emailContent = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 10px; background-color: black; color: #ffffff;">
             <div style="text-align: center;">
               <img src="https://i.pinimg.com/550x/78/1d/67/781d6783a1465bcfd437146c334f783c.jpg" alt="Amazon" style="width: 200px; margin-bottom: 20px; filter: brightness(150%);">
@@ -216,12 +216,12 @@ exports.approveOwner = async (req, res) => {
             </p>
           </div>
         `;
-        break;
-    
-        
-      case 'Pending':
-      default:
-        emailContent = `
+                break;
+
+
+            case 'Pending':
+            default:
+                emailContent = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border-radius: 10px; background-color: black; color: #ffffff;">
             <div style="text-align: center;">
               <img src="https://i.pinimg.com/550x/78/1d/67/781d6783a1465bcfd437146c334f783c.jpg" alt="Amazon" style="width: 200px; margin-bottom: 20px; filter: brightness(150%);">
@@ -239,15 +239,15 @@ exports.approveOwner = async (req, res) => {
             </p>
           </div>
         `;
-        break;
-    }
+                break;
+        }
 
-        
+
         var mailOptions = {
             from: 'vivekvaghasiya133@gmail.com',
             to: AprroveOwner.email,
             subject: 'Owner status',
-            html:emailContent
+            html: emailContent
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -366,3 +366,115 @@ exports.getAllBox = async (req, res) => {
     }
 }
 
+exports.Count_owner = async (req, res) => {
+
+    try {
+        var ownerCount = await Owner.find().count()
+        res.status(200).json({
+            status: true,
+            cnt: ownerCount
+        })
+    } catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+
+}
+
+exports.Count_Box = async (req, res) => {
+    try {
+
+        var boxCount = await Box.find().count()
+        res.status(200).json({
+            status: true,
+            cnt: boxCount
+        })
+    } catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
+}
+
+
+
+exports.getOwnerbyid = async (req, res) => {
+    try {
+
+        var token = req.headers.auth
+
+        if (!token) {
+            throw new Error("Token must be provided");
+        }
+        const decoded = jwt.verify(token, 'Owner');
+
+        if (!decoded) {
+            throw new Error("Invalid token");
+        }
+
+        var OwnerData = await Owner.findById(decoded, { _id: 0 })
+        console.log(OwnerData);
+
+        res.status(200).json({
+            status: true,
+            data: OwnerData
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+}
+exports.getAdminbyid = async (req, res) => {
+    try {
+
+        var token = req.headers.admin
+
+        if (!token) {
+            throw new Error("Token must be provided");
+        }
+        const decoded = jwt.verify(token, 'Admin');
+
+        if (!decoded) {
+            throw new Error("Invalid token");
+        }
+
+        var OwnerData = await Admin.findById(decoded, { _id: 0 })
+        console.log(OwnerData);
+
+        res.status(200).json({
+            status: true,
+            data: OwnerData
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+}
+
+exports.searchIteam = async (req, res) => {
+    try {
+        const query = req.query.q;
+        const search = await Box.find({ boxName: new RegExp(query, 'i') });
+
+        res.status(200).json({
+            status: true,
+            data: search
+        })
+
+
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+}
