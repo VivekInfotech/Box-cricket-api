@@ -11,7 +11,10 @@ router.post('/register',user.userRegister)
 router.put('/UserUpdate',user.userUpdate)
 router.delete('/UserDelete',user.userDelete)
 router.get('/viewAllBox',user.viewAllBox)
+
 router.get('/viewOneBox/:id',user.getOneBox)
+
+router.get('/getshifts/:id',user.getshift)
 
 
 module.exports = router;
