@@ -28,35 +28,68 @@ const addressSchema = new mongoose.Schema({
     }
 }, { _id: false });
 
+// const Shift = new mongoose.Schema({
+//     morning: {
+//         eight_nine_am: { type: Boolean, default: true },
+//         nine_ten_am: { type: Boolean, default: true },
+//         ten_eleven_am: { type: Boolean, default: true },
+//         eleven_twelve_am: { type: Boolean, default: true },
+//         twelve_one_pm: { type: Boolean, default: true },
+//         one_two_pm: { type: Boolean, default: true },
+//         two_three_pm: { type: Boolean, default: true },
+//         three_four_pm: { type: Boolean, default: true },
+//         four_five_pm: { type: Boolean, default: true },
+//         five_six_pm: { type: Boolean, default: true },
+//         six_seven_pm: { type: Boolean, default: true },
+//         seven_eight_pm: { type: Boolean, default: true },
+//         morningPrice: { type: Number, required: true }
+//     },
+//     night: {
+//         eight_nine_pm: { type: Boolean, default: true },
+//         nine_ten_pm: { type: Boolean, default: true },
+//         ten_eleven_pm: { type: Boolean, default: true },
+//         eleven_twelve_pm: { type: Boolean, default: true },
+//         twelve_one_am: { type: Boolean, default: true },
+//         one_two_am: { type: Boolean, default: true },
+//         two_three_am: { type: Boolean, default: true },
+//         three_four_am: { type: Boolean, default: true },
+//         four_five_am: { type: Boolean, default: true },
+//         five_six_am: { type: Boolean, default: true },
+//         six_seven_am: { type: Boolean, default: true },
+//         seven_eight_am: { type: Boolean, default: true },
+//         nightPrice: { type: Number, required: true }
+//     }
+// }, { _id: false });
+
 const Shift = new mongoose.Schema({
-    morning: {
-        eight_nine_am: { type: Boolean, default: true },
-        nine_ten_am: { type: Boolean, default: true },
-        ten_eleven_am: { type: Boolean, default: true },
-        eleven_twelve_am: { type: Boolean, default: true },
-        twelve_one_pm: { type: Boolean, default: true },
-        one_two_pm: { type: Boolean, default: true },
-        two_three_pm: { type: Boolean, default: true },
-        three_four_pm: { type: Boolean, default: true },
-        four_five_pm: { type: Boolean, default: true },
-        five_six_pm: { type: Boolean, default: true },
-        six_seven_pm: { type: Boolean, default: true },
-        seven_eight_pm: { type: Boolean, default: true },
+    morning: { 
+        '8:00AM - 9:00AM': { type: Boolean, default: true },
+        '9:00AM - 10:00AM': { type: Boolean, default: true },
+        '10:00AM - 11:00AM': { type: Boolean, default: true },
+        '11:00AM - 12:00PM': { type: Boolean, default: true },
+        '12:00PM - 1:00PM': { type: Boolean, default: true },
+        '1:00PM - 2:00PM': { type: Boolean, default: true },
+        '2:00PM - 3:00PM': { type: Boolean, default: true },
+        '3:00PM - 4:00PM': { type: Boolean, default: true },
+        '4:00PM - 5:00PM': { type: Boolean, default: true },
+        '5:00PM - 6:00PM': { type: Boolean, default: true },
+        '6:00PM - 7:00PM': { type: Boolean, default: true },
+        '7:00PM - 8:00PM': { type: Boolean, default: true },
         morningPrice: { type: Number, required: true }
-    },
+    },  
     night: {
-        eight_nine_pm: { type: Boolean, default: true },
-        nine_ten_pm: { type: Boolean, default: true },
-        ten_eleven_pm: { type: Boolean, default: true },
-        eleven_twelve_pm: { type: Boolean, default: true },
-        twelve_one_am: { type: Boolean, default: true },
-        one_two_am: { type: Boolean, default: true },
-        two_three_am: { type: Boolean, default: true },
-        three_four_am: { type: Boolean, default: true },
-        four_five_am: { type: Boolean, default: true },
-        five_six_am: { type: Boolean, default: true },
-        six_seven_am: { type: Boolean, default: true },
-        seven_eight_am: { type: Boolean, default: true },
+        '8:00PM - 9:00PM': { type: Boolean, default: true },
+        '9:00PM - 10:00PM': { type: Boolean, default: true },
+        '10:00PM - 11:00PM': { type: Boolean, default: true },
+        '11:00PM - 12:00AM': { type: Boolean, default: true },
+        '12:00AM - 1:00AM': { type: Boolean, default: true },
+        '1:00AM - 2:00AM': { type: Boolean, default: true },
+        '2:00AM - 3:00AM': { type: Boolean, default: true },
+        '3:00AM - 4:00AM': { type: Boolean, default: true },
+        '4:00AM - 5:00AM': { type: Boolean, default: true },
+        '5:00AM - 6:00AM': { type: Boolean, default: true },
+        '6:00AM - 7:00AM': { type: Boolean, default: true },
+        '7:00AM - 8:00AM': { type: Boolean, default: true },
         nightPrice: { type: Number, required: true }
     }
 }, { _id: false });

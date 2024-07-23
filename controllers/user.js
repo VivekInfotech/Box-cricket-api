@@ -166,17 +166,31 @@ exports.getshift = async (req, res) => {
         }
 
         // Define the shift keys
+        // const morningShifts = [
+        //     'eight_nine_am', 'nine_ten_am', 'ten_eleven_am', 'eleven_twelve_am', 
+        //     'twelve_one_pm', 'one_two_pm', 'two_three_pm', 'three_four_pm',
+        //     'four_five_pm', 'five_six_pm', 'six_seven_pm', 'seven_eight_pm'
+        // ];
+
+        // const nightShifts = [
+        //     'eight_nine_pm', 'nine_ten_pm', 'ten_eleven_pm', 'eleven_twelve_pm', 
+        //     'twelve_one_am', 'one_two_am', 'two_three_am', 'three_four_am',
+        //     'four_five_am', 'five_six_am', 'six_seven_am', 'seven_eight_am'
+        // ];
+
+
         const morningShifts = [
-            'eight_nine_am', 'nine_ten_am', 'ten_eleven_am', 'eleven_twelve_am', 
-            'twelve_one_pm', 'one_two_pm', 'two_three_pm', 'three_four_pm',
-            'four_five_pm', 'five_six_pm', 'six_seven_pm', 'seven_eight_pm'
+            '8:00AM - 9:00AM', '9:00AM - 10:00AM', '10:00AM - 11:00AM', '11:00AM - 12:00PM', 
+            '12:00PM - 1:00PM', '1:00PM - 2:00PM', '2:00PM - 3:00PM', '3:00PM - 4:00PM',
+            '4:00PM - 5:00PM', '5:00PM - 6:00PM', '6:00PM - 7:00PM', '7:00PM - 8:00PM'
         ];
 
         const nightShifts = [
-            'eight_nine_pm', 'nine_ten_pm', 'ten_eleven_pm', 'eleven_twelve_pm', 
-            'twelve_one_am', 'one_two_am', 'two_three_am', 'three_four_am',
-            'four_five_am', 'five_six_am', 'six_seven_am', 'seven_eight_am'
+            '8:00PM - 9:00PM', '9:00PM - 10:00PM', '10:00PM - 11:00PM', '11:00PM - 12:00AM', 
+            '12:00AM - 1:00AM', '1:00AM - 2:00AM', '2:00AM - 3:00AM', '3:00AM - 4:00AM',
+            '4:00AM - 5:00AM', '5:00AM - 6:00AM', '6:00AM - 7:00AM', '7:00AM - 8:00AM'
         ];
+
 
         // Update the shift status
         if (current_period === 'morning') {
