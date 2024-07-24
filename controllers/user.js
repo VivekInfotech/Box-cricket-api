@@ -152,12 +152,13 @@ catch (error) {
 exports.getshift = async (req, res) => {
     try {
         const box_id = req.params.id;
+        console.log(box_id)
         const current_time = new Date();
         const current_hour = current_time.getHours();
         const current_period = current_hour >= 8 && current_hour < 20 ? 'morning' : 'night';
 
-        const box = await Box.findById(box_id , {address: 0 , ownerId : 0 , createdAt : 0 , images :0 , ownerId :0 , status : 0 , updatedAt :0 , _id : 0 , __v : 0} );
-
+        const box = await Box.findById(box_id , {address: 0 , ownerId : 0 , createdAt : 0 , images :0 , ownerId :0 , status : 0 , updatedAt :0  , __v : 0} );
+        console.log(box)
         if (!box) {
             return res.status(404).json({
                 status: 'Failed',
