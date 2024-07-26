@@ -7,7 +7,7 @@ exports.addBox = async (req, res) => {
         var {boxName, images ,street ,city,state , area,pinCode,country, morningPrice , nightPrice , contact } = req.body
 
         if (!boxName || !street || !city || !state || !area || !pinCode || !country || !morningPrice || !nightPrice || !contact) {
-            throw new Error('Filds are required asdasdfa')
+            throw new Error('Filds are required')
         }
         var id = await jwt.verify(req.headers.auth, 'Owner')
         if (!id) {

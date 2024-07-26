@@ -1,11 +1,12 @@
 var User = require('../models/user/user')
 var bcrypt = require('bcrypt')
 var Box = require('../models/Box-Owner/box')
+var Book = require('../models/user/book')
 exports.userRegister = async (req, res) => {
     try {
-        var { userName ,email , password } = req.body
+        var { userName, email, password } = req.body
         password = await bcrypt.hash(password, 12)
-        
+
         var UserData = new User({
             userName,
             password,
@@ -66,7 +67,7 @@ exports.userLogin = async (req, res) => {
 
 exports.userUpdate = async (req, res) => {
     try {
-        var id = req.params.id
+        let id = req.params.id
         console.log(id);
 
         if (!id) {
@@ -88,10 +89,10 @@ exports.userUpdate = async (req, res) => {
     }
 }
 
-exports.userDelete = async(req,res)=>{
+exports.userDelete = async (req, res) => {
     try {
-        
-        var id = req.params.id
+
+        let id = req.params.id
 
         if (!id) {
             throw new Error('Include id in params')
@@ -113,13 +114,13 @@ exports.userDelete = async(req,res)=>{
     }
 }
 
-exports.viewAllBox = async (req,res) => {
-    try{
+exports.viewAllBox = async (req, res) => {
+    try {
         var Boxdata = await Box.find()//projection //password not show
 
         res.status(200).json({
-            status : true,
-            data : Boxdata
+            status: true,
+            data: Boxdata
         })
 
     }
@@ -131,34 +132,47 @@ exports.viewAllBox = async (req,res) => {
     }
 }
 
-exports.getOneBox = async (req,res) => {
-try{
+exports.getOneBox = async (req, res) => {
+    try {
 
-    var box_id =  req.params.id
-    var Boxdata = await Box.findById(box_id)
+        var box_id = req.params.id
+        var Boxdata = await Box.findById(box_id)
 
-    res.status(200).json({
-        status : true,
-        data : Boxdata
-    })
+        res.status(200).json({
+            status: true,
+            data: Boxdata
+        })
+    }
+    catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        })
+    }
 }
-catch (error) {
-    res.status(401).json({
-        status: 'Failed',
-        message: error.message
-    })
-}
-}
+
+
 exports.getshift = async (req, res) => {
     try {
         const box_id = req.params.id;
-        console.log(box_id)
+
         const current_time = new Date();
         const current_hour = current_time.getHours();
+        const current_minute = current_time.getMinutes();
+        const current_second = current_time.getSeconds();
+        const current_millisecond = current_time.getMilliseconds();
         const current_period = current_hour >= 8 && current_hour < 20 ? 'morning' : 'night';
 
-        const box = await Box.findById(box_id , {address: 0 , ownerId : 0 , createdAt : 0 , images :0 , ownerId :0 , status : 0 , updatedAt :0  , __v : 0} );
-        console.log(box)
+        const box = await Box.findById(box_id, {
+            address: 0,
+            ownerId: 0,
+            createdAt: 0,
+            images: 0,
+            status: 0,
+            updatedAt: 0,
+            __v: 0
+        });
+
         if (!box) {
             return res.status(404).json({
                 status: 'Failed',
@@ -166,32 +180,25 @@ exports.getshift = async (req, res) => {
             });
         }
 
-        // Define the shift keys
-        // const morningShifts = [
-        //     'eight_nine_am', 'nine_ten_am', 'ten_eleven_am', 'eleven_twelve_am', 
-        //     'twelve_one_pm', 'one_two_pm', 'two_three_pm', 'three_four_pm',
-        //     'four_five_pm', 'five_six_pm', 'six_seven_pm', 'seven_eight_pm'
-        // ];
-
-        // const nightShifts = [
-        //     'eight_nine_pm', 'nine_ten_pm', 'ten_eleven_pm', 'eleven_twelve_pm', 
-        //     'twelve_one_am', 'one_two_am', 'two_three_am', 'three_four_am',
-        //     'four_five_am', 'five_six_am', 'six_seven_am', 'seven_eight_am'
-        // ];
-
-
         const morningShifts = [
-            '8:00AM - 9:00AM', '9:00AM - 10:00AM', '10:00AM - 11:00AM', '11:00AM - 12:00PM', 
+            '8:00AM - 9:00AM', '9:00AM - 10:00AM', '10:00AM - 11:00AM', '11:00AM - 12:00PM',
             '12:00PM - 1:00PM', '1:00PM - 2:00PM', '2:00PM - 3:00PM', '3:00PM - 4:00PM',
             '4:00PM - 5:00PM', '5:00PM - 6:00PM', '6:00PM - 7:00PM', '7:00PM - 8:00PM'
         ];
 
         const nightShifts = [
-            '8:00PM - 9:00PM', '9:00PM - 10:00PM', '10:00PM - 11:00PM', '11:00PM - 12:00AM', 
+            '8:00PM - 9:00PM', '9:00PM - 10:00PM', '10:00PM - 11:00PM', '11:00PM - 12:00AM',
             '12:00AM - 1:00AM', '1:00AM - 2:00AM', '2:00AM - 3:00AM', '3:00AM - 4:00AM',
             '4:00AM - 5:00AM', '5:00AM - 6:00AM', '6:00AM - 7:00AM', '7:00AM - 8:00AM'
         ];
 
+        const resetShiftStatus = (shiftPeriod, shift) => {
+            const delay = 3600000 - (current_minute * 60000 + current_second * 1000 + current_millisecond);
+            setTimeout(() => {
+                box.opning[shiftPeriod][shift] = true;
+                box.save().catch(err => console.error('Error resetting shifts:', err));
+            }, delay);
+        };
 
         // Update the shift status
         if (current_period === 'morning') {
@@ -199,6 +206,7 @@ exports.getshift = async (req, res) => {
                 const shiftKey = morningShifts[i - 8];
                 if (current_hour >= i) {
                     box.opning.morning[shiftKey] = false;
+                    resetShiftStatus('morning', shiftKey);
                 }
             }
         } else {
@@ -206,12 +214,14 @@ exports.getshift = async (req, res) => {
                 const shiftKey = nightShifts[i - 20];
                 if (current_hour >= i) {
                     box.opning.night[shiftKey] = false;
+                    resetShiftStatus('night', shiftKey);
                 }
             }
             for (let i = 0; i < 8; i++) {
                 const shiftKey = nightShifts[12 + i];
                 if (current_hour >= i || current_hour < 8) {
                     box.opning.night[shiftKey] = false;
+                    resetShiftStatus('night', shiftKey);
                 }
             }
         }
@@ -231,4 +241,120 @@ exports.getshift = async (req, res) => {
 };
 
 
+exports.bookShift = async (req, res) => {
+    try {
+        const box_id = req.params.id;
+        const { shiftType, timeSlot, newValue } = req.body;
 
+        if (!box_id) {
+            throw new Error('Box ID not found');
+        }
+
+        if (!['morning', 'night'].includes(shiftType)) {
+            throw new Error('Invalid shift type');
+        }
+
+        const morningSlots = [
+            '8:00AM - 9:00AM', '9:00AM - 10:00AM', '10:00AM - 11:00AM', '11:00AM - 12:00PM',
+            '12:00PM - 1:00PM', '1:00PM - 2:00PM', '2:00PM - 3:00PM', '3:00PM - 4:00PM',
+            '4:00PM - 5:00PM', '5:00PM - 6:00PM', '6:00PM - 7:00PM', '7:00PM - 8:00PM'];
+
+        const nightSlots = [
+            '8:00PM - 9:00PM', '9:00PM - 10:00PM', '10:00PM - 11:00PM', '11:00PM - 12:00AM',
+            '12:00AM - 1:00AM', '1:00AM - 2:00AM', '2:00AM - 3:00AM', '3:00AM - 4:00AM',
+            '4:00AM - 5:00AM', '5:00AM - 6:00AM', '6:00AM - 7:00AM', '7:00AM - 8:00AM'
+        ];
+
+        let validTimeSlots = [];
+        if (shiftType === 'morning') {
+            validTimeSlots = morningSlots;
+        } else if (shiftType === 'night') {
+            validTimeSlots = nightSlots;
+        }
+
+        if (!validTimeSlots.includes(timeSlot)) {
+            throw new Error('Invalid time slot for the specified shift type');
+        }
+
+
+        const currentBox = await Box.findById(box_id).lean();
+        if (!currentBox) {
+            throw new Error('Box not found');
+        }
+
+        const updateData = {
+            opning: {
+                morning: {
+                    ...currentBox.opning.morning,
+                    ...(shiftType === 'morning' && { [timeSlot]: newValue })
+                },
+                night: {
+                    ...currentBox.opning.night,
+                    ...(shiftType === 'night' && { [timeSlot]: newValue })
+                }
+            }
+        };
+
+        const updatedShift = await Box.findByIdAndUpdate(
+            box_id,
+            { $set: updateData },
+            { new: true, fields: { address: 0, ownerId: 0, createdAt: 0, images: 0, status: 0, updatedAt: 0, __v: 0 } }
+        );
+
+        res.status(200).json({
+            status: 'Success',
+            data: updatedShift
+        });
+
+    } catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+}
+
+exports.bookInfo = async (req, res) => {
+    try {
+        let boxid = req.params.id
+        if (!boxid) {
+            throw new Error('Box id not found')
+        }
+
+        var { name, phone, email, note , time } = req.body
+
+        if (!name) {
+            throw new Error('Name is required')
+        }
+        if (!phone) {
+            throw new Error('phone number is required')
+        }
+        if (!email) {
+            throw new Error('email is required')
+        }
+
+        var booking = new Book({
+            boxid,
+            name,
+            phone,
+            email,
+            note,
+            time
+        })
+
+        await booking.save()
+
+        res.status(200).json({
+            status: 'Success',
+            message: 'Booking Successfully',
+            data: booking
+        })
+
+
+    } catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+}

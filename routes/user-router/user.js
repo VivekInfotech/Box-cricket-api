@@ -14,7 +14,10 @@ router.get('/viewAllBox',user.viewAllBox)
 
 router.get('/viewOneBox/:id',user.getOneBox)
 
-router.get('/getshifts/:id',user.getshift)
+router.get('/getshifts/:id', user.getshift)
+
+router.post('/bookshift/:id', user.bookShift)
+router.post('/bookbox/:id', user.bookInfo)
 
 
 module.exports = router;

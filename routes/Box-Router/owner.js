@@ -30,8 +30,6 @@ router.put('/updatebox/:id' ,upload.array('images',10), box.updateBox)
 router.delete('/deletebox/:id' , box.removeBox)
   
 router.get('/boxbyowner' , box.ownerBox)
-
-
-
+  
 
 module.exports = router;
