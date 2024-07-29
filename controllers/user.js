@@ -358,3 +358,24 @@ exports.bookInfo = async (req, res) => {
         });
     }
 }
+
+
+exports.getOrderbybox = async(req,res) => {
+    try {
+        let box_id = req.params.id
+        if (!box_id) {
+            throw new Error('Box id not found')
+        }
+        var book = await Book.find({ boxid: box_id }).populate("boxid", { boxName :1})
+        res.status(200).json({
+            status: 'Success',
+            message: 'get Successfully',
+            data: book
+        })
+    } catch (error) {
+        res.status(401).json({
+            status: 'Failed',
+            message: error.message
+        });
+    }
+}

@@ -18,6 +18,7 @@ router.get('/getshifts/:id', user.getshift)
 
 router.post('/bookshift/:id', user.bookShift)
 router.post('/bookbox/:id', user.bookInfo)
+router.get('/getorderbybox/:id', user.getOrderbybox)
 
 
 module.exports = router;
