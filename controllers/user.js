@@ -240,11 +240,10 @@ exports.getshift = async (req, res) => {
     }
 };
 
-
 exports.bookShift = async (req, res) => {
     try {
         const box_id = req.params.id;
-        const { shiftType, timeSlots, newValue } = req.body;
+        const { shiftType, timeSlots , newValue } = req.body;
 
         if (!box_id) {
             throw new Error('Box ID not found');
@@ -272,6 +271,8 @@ exports.bookShift = async (req, res) => {
         } else if (shiftType === 'night') {
             validTimeSlots = nightSlots;
         }
+
+        // console.log('Valid time slots for shift type:', validTimeSlots); // Debugging line
 
         if (!Array.isArray(timeSlots) || timeSlots.some(slot => !validTimeSlots.includes(slot))) {
             throw new Error('Invalid time slots for the specified shift type');
