@@ -244,7 +244,7 @@ exports.getshift = async (req, res) => {
 exports.bookShift = async (req, res) => {
     try {
         const box_id = req.params.id;
-        const { shiftType, timeSlot, newValue } = req.body;
+        const { shiftType, timeSlots, newValue } = req.body;
 
         if (!box_id) {
             throw new Error('Box ID not found');
@@ -257,7 +257,8 @@ exports.bookShift = async (req, res) => {
         const morningSlots = [
             '8:00AM - 9:00AM', '9:00AM - 10:00AM', '10:00AM - 11:00AM', '11:00AM - 12:00PM',
             '12:00PM - 1:00PM', '1:00PM - 2:00PM', '2:00PM - 3:00PM', '3:00PM - 4:00PM',
-            '4:00PM - 5:00PM', '5:00PM - 6:00PM', '6:00PM - 7:00PM', '7:00PM - 8:00PM'];
+            '4:00PM - 5:00PM', '5:00PM - 6:00PM', '6:00PM - 7:00PM', '7:00PM - 8:00PM'
+        ];
 
         const nightSlots = [
             '8:00PM - 9:00PM', '9:00PM - 10:00PM', '10:00PM - 11:00PM', '11:00PM - 12:00AM',
@@ -272,10 +273,9 @@ exports.bookShift = async (req, res) => {
             validTimeSlots = nightSlots;
         }
 
-        if (!validTimeSlots.includes(timeSlot)) {
-            throw new Error('Invalid time slot for the specified shift type');
+        if (!Array.isArray(timeSlots) || timeSlots.some(slot => !validTimeSlots.includes(slot))) {
+            throw new Error('Invalid time slots for the specified shift type');
         }
-
 
         const currentBox = await Box.findById(box_id).lean();
         if (!currentBox) {
@@ -284,16 +284,18 @@ exports.bookShift = async (req, res) => {
 
         const updateData = {
             opning: {
-                morning: {
-                    ...currentBox.opning.morning,
-                    ...(shiftType === 'morning' && { [timeSlot]: newValue })
-                },
-                night: {
-                    ...currentBox.opning.night,
-                    ...(shiftType === 'night' && { [timeSlot]: newValue })
-                }
+                morning: { ...currentBox.opning.morning },
+                night: { ...currentBox.opning.night }
             }
         };
+
+        timeSlots.forEach(slot => {
+            if (shiftType === 'morning') {
+                updateData.opning.morning[slot] = newValue;
+            } else if (shiftType === 'night') {
+                updateData.opning.night[slot] = newValue;
+            }
+        });
 
         const updatedShift = await Box.findByIdAndUpdate(
             box_id,
@@ -303,6 +305,7 @@ exports.bookShift = async (req, res) => {
 
         res.status(200).json({
             status: 'Success',
+            message: 'Booking Successfully',
             data: updatedShift
         });
 
@@ -314,6 +317,7 @@ exports.bookShift = async (req, res) => {
     }
 }
 
+
 exports.bookInfo = async (req, res) => {
     try {
         let boxid = req.params.id
@@ -321,7 +325,7 @@ exports.bookInfo = async (req, res) => {
             throw new Error('Box id not found')
         }
 
-        var { name, phone, email, note , time } = req.body
+        var { name, phone, email, note , time , date } = req.body
 
         if (!name) {
             throw new Error('Name is required')
@@ -339,7 +343,8 @@ exports.bookInfo = async (req, res) => {
             phone,
             email,
             note,
-            time
+            time,
+            date
         })
 
         await booking.save()

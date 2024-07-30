@@ -20,8 +20,12 @@ var bookInfo = new mongoose.Schema({
     note: {
         type: String
     },
-    time:{
+    time:[{
         type:String
+    }],
+    date : 
+    {
+        type : String
     }
 })
 
