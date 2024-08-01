@@ -245,6 +245,7 @@ exports.bookShift = async (req, res) => {
         const box_id = req.params.id;
         const { shiftType, timeSlots , newValue } = req.body;
 
+
         if (!box_id) {
             throw new Error('Box ID not found');
         }
@@ -304,6 +305,8 @@ exports.bookShift = async (req, res) => {
             { new: true, fields: { address: 0, ownerId: 0, createdAt: 0, images: 0, status: 0, updatedAt: 0, __v: 0 } }
         );
 
+        // console.log(updateData);
+
         res.status(200).json({
             status: 'Success',
             message: 'Booking Successfully',
@@ -327,6 +330,7 @@ exports.bookInfo = async (req, res) => {
         }
 
         var { name, phone, email, note , time , date } = req.body
+        console.log(time);
 
         if (!name) {
             throw new Error('Name is required')
@@ -337,7 +341,9 @@ exports.bookInfo = async (req, res) => {
         if (!email) {
             throw new Error('email is required')
         }
-
+        if(!date){
+            throw new Error('date is required')
+        }
         var booking = new Book({
             boxid,
             name,
@@ -355,8 +361,6 @@ exports.bookInfo = async (req, res) => {
             message: 'Booking Successfully',
             data: booking
         })
-
-
     } catch (error) {
         res.status(401).json({
             status: 'Failed',
